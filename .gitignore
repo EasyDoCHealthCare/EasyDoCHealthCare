@@ -1,7 +1,7 @@
 # ignore not needed files in backend
 
 # dependencies
-node_modules/
+node_modules
 
 # Keys
 Keys.js
