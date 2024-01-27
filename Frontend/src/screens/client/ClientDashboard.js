@@ -13,7 +13,7 @@ import HomeScreen from "../../sideScreens/HomeScreen";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const ClientLogIn = () => {
+const ClientDashboard = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
   return (
@@ -21,18 +21,38 @@ const ClientLogIn = () => {
       <HomeScreen />
       <View style={styles.container1}>
         <View style={styles.container2}>
-          <TouchableOpacity style={styles.cards}>
+          <TouchableOpacity
+            style={styles.cards}
+            onPress={() => {
+              navigation.navigate("AddDoc");
+            }}
+          >
             <Text style={styles.text}>Add Doctor</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cards}>
+          <TouchableOpacity
+            style={styles.cards}
+            onPress={() => {
+              navigation.navigate("RemoveDoc");
+            }}
+          >
             <Text style={styles.text}>Remove Doctor</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.container2}>
-          <TouchableOpacity style={styles.cards}>
+          <TouchableOpacity
+            style={styles.cards}
+            onPress={() => {
+              navigation.navigate("ChangeTimings");
+            }}
+          >
             <Text style={styles.text}>Change Timings of Doctor</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cards}>
+          <TouchableOpacity
+            style={styles.cards}
+            onPress={() => {
+              navigation.navigate("PatList");
+            }}
+          >
             <Text style={styles.text}>Patient List</Text>
           </TouchableOpacity>
         </View>
@@ -44,7 +64,7 @@ const ClientLogIn = () => {
   );
 };
 
-export default ClientLogIn;
+export default ClientDashboard;
 
 const styles = StyleSheet.create({
   container1: {
