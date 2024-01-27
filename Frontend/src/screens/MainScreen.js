@@ -10,6 +10,11 @@ import ClientSignUp from "./client/ClientSignUp";
 import AuthRegister from "./client/AuthRegister";
 import LogInSuccess from "./client/LogInSuccess";
 import ClientDashboard from "./client/ClientDashboard";
+import AddDoc from "./client/AddDoc";
+import RemoveDoc from "./client/RemoveDoc";
+import ChangeTimings from "./client/ChangeTimings";
+import PatList from "./client/PatList";
+import GetList from "./client/GetList";
 
 const Drawer = createDrawerNavigator();
 
@@ -44,6 +49,31 @@ const MainScreen = () => {
       <Drawer.Screen
         name="ClientDashboard"
         component={ClientDashboard}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="AddDoc"
+        component={AddDoc}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="RemoveDoc"
+        component={RemoveDoc}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="ChangeTimings"
+        component={ChangeTimings}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="PatList"
+        component={PatList}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="GetList"
+        component={GetList}
         options={{ headerShown: false }}
       />
     </Drawer.Navigator>

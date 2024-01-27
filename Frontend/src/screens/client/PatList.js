@@ -2,20 +2,36 @@ import {
   StyleSheet,
   Text,
   View,
+  Platform,
   TouchableOpacity,
-  TextInput,
 } from "react-native";
+import React, { useState } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns"; // Optional: for date formatting
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SelectDropdown from "react-native-select-dropdown";
 
 import HomeScreen from "../../sideScreens/HomeScreen";
-import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const ClientSignUp = () => {
-  const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
+const PatList = () => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const countries = ["Avishek", "Sourav", "Kartik"];
   const navigation = useNavigation();
+
+  const showDatepicker = () => {
+    setShowDatePicker(true);
+  };
+
+  const onDateChange = (event, date) => {
+    setShowDatePicker(Platform.OS === "ios"); // Close the picker on iOS
+    if (date) {
+      setSelectedDate(date);
+    }
+  };
   return (
     <View style={{ flex: 1 }}>
       <HomeScreen />
@@ -28,7 +44,7 @@ const ClientSignUp = () => {
             marginBottom: 2,
           }}
         >
-          Select Client type
+          Select Doctor
         </Text>
         <SelectDropdown
           data={countries}
@@ -37,7 +53,7 @@ const ClientSignUp = () => {
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
           }}
-          defaultButtonText={"Select Client"}
+          defaultButtonText={"Doctor's Name"}
           buttonTextAfterSelection={(selectedItem, index) => {
             return selectedItem;
           }}
@@ -60,49 +76,40 @@ const ClientSignUp = () => {
           rowStyle={styles.dropdown1RowStyle}
           rowTextStyle={styles.dropdown1RowTxtStyle}
         />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Name of Organization"
-        ></TextInput>
-        <TextInput style={styles.textInput} placeholder="Email Id"></TextInput>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Number"
-          keyboardType="numeric"
-        ></TextInput>
-        <TextInput style={styles.textInput} placeholder="Username"></TextInput>
-        <TextInput style={styles.textInput} placeholder="Password"></TextInput>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Confirm Password"
-        ></TextInput>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Name of contact person"
-        ></TextInput>
-
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() => {
-            navigation.navigate("AuthRegister");
+        <Text
+          style={{
+            fontSize: 18,
+            alignSelf: "flex-start",
+            marginLeft: 70,
+            marginBottom: 2,
+            marginTop:15
           }}
         >
-          <Text
-            style={{ textDecorationLine: "underline", fontStyle: "italic" }}
-          >
-            Next
-          </Text>
-        </TouchableOpacity>
-        <View style={{ flexDirection: "row", color: "#fff", height: 30 }}>
-          <Text style={{ color: "#fff" }}>Already have an account? </Text>
+          Select Date
+        </Text>
+        <View style={styles.container1}>
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("ClientLogIn");
-            }}
+            style={styles.dateContainer}
+            onPress={showDatepicker}
           >
-            <Text>LogIn</Text>
+            <Text style={styles.dateText}>
+              {format(selectedDate, "MMMM dd, yyyy")}
+            </Text>
           </TouchableOpacity>
+
+          {showDatePicker && (
+            <DateTimePicker
+              value={selectedDate}
+              mode="date"
+              display="default"
+              onChange={onDateChange}
+            />
+          )}
         </View>
+
+        <TouchableOpacity style={styles.btn} onPress={()=>{navigation.navigate("GetList")}}>
+          <Text>Get List</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.btnExit}>
           <Text>Exit</Text>
         </TouchableOpacity>
@@ -111,7 +118,7 @@ const ClientSignUp = () => {
   );
 };
 
-export default ClientSignUp;
+export default PatList;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,6 +145,7 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 30,
     width: 150,
+    top: 100,
   },
   loginBtn: {
     // flex:1,
@@ -155,8 +163,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 5,
     height: 30,
-    width: 150,
-    top: 100,
+    width: 200,
+    top: 150,
   },
   dropdown1BtnStyle: {
     width: 260,
@@ -173,4 +181,18 @@ const styles = StyleSheet.create({
     borderBottomColor: "#C5C5C5",
   },
   dropdown1RowTxtStyle: { color: "#444", textAlign: "left" },
+
+  container1: {
+    alignItems: "center",
+    marginTop: 10,
+  },
+  dateContainer: {
+    padding: 8,
+    backgroundColor: "#3498db",
+    borderRadius: 5,
+  },
+  dateText: {
+    color: "white",
+    fontSize: 18,
+  },
 });
