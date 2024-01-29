@@ -59,7 +59,7 @@ const ClientLogin = () => {
           <Text style={{ color: "#fff" }}>Already have an account? </Text>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("ClientLogin");
+              navigation.navigate("ClientLogIn");
             }}
           >
             <Text>LogIn</Text>
