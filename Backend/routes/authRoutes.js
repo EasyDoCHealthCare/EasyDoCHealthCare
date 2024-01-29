@@ -6,6 +6,10 @@ const { jwtKey } = require("../keys");
 const router = express.Router();
 const User = mongoose.model("User");
 
+router.get("/signup", (req, res) => {
+  res.send("sign up pages");
+});
+
 router.post("/signup", async (req, res) => {
   console.log(req.body);
 
