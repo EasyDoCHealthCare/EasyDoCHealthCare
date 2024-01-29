@@ -13,7 +13,7 @@ import HomeScreen from "../../sideScreens/HomeScreen";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const ClientLogin = () => {
+const LogInSuccess = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
   return (
@@ -49,7 +49,7 @@ const ClientLogin = () => {
   );
 };
 
-export default ClientLogin;
+export default LogInSuccess;
 
 const styles = StyleSheet.create({
   container: {

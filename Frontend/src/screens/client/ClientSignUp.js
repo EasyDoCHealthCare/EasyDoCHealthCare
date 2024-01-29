@@ -14,7 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import HomeScreen from "../../sideScreens/HomeScreen";
 
-const ClientLogin = () => {
+const ClientSignUp = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
 
@@ -198,7 +198,7 @@ const ClientLogin = () => {
   );
 };
 
-export default ClientLogin;
+export default ClientSignUp;
 
 const styles = StyleSheet.create({
   container: {
