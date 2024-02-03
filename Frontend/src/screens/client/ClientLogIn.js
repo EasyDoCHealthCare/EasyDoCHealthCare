@@ -18,12 +18,16 @@ const ClientLogIn = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
 
+  const [selectedValue, setSelectedValue] = useState(""); // ["Clinic", "Doctor's Chamber", "Testing Center"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const loginCred = async () => {
-    console.log("email: ", email);
-    console.log("password: ", password);
+    // check if any field is empty
+    if (selectedValue === "" || email === "" || password === "") {
+      alert("please fill all the fields");
+      return;
+    }
 
     fetch("http://10.117.10.75:3000/signin", {
       method: "POST",
@@ -31,6 +35,7 @@ const ClientLogIn = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        clientType: selectedValue,
         email: email,
         password: password,
       }),
@@ -68,7 +73,8 @@ const ClientLogIn = () => {
           // defaultValueByIndex={1}
           // defaultValue={'Egypt'}
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
+            // console.log(selectedItem, index);
+            setSelectedValue(selectedItem);
           }}
           defaultButtonText={"Select Client"}
           buttonTextAfterSelection={(selectedItem, index) => {
@@ -96,7 +102,7 @@ const ClientLogIn = () => {
 
         <TextInput
           style={styles.textInput}
-          placeholder="Email Id*"
+          placeholder="Email Id"
           value={email}
           onChangeText={(text) => {
             setEmail(text);
@@ -105,7 +111,7 @@ const ClientLogIn = () => {
 
         <TextInput
           style={styles.textInput}
-          placeholder="Password*"
+          placeholder="Password"
           value={password}
           onChangeText={(text) => {
             setPassword(text);

@@ -13,16 +13,42 @@ router.get("/signup", (req, res) => {
 router.post("/signup", async (req, res) => {
   console.log(req.body);
 
-  const { email, password } = req.body;
+  const {
+    clienttype,
+    organizationName,
+    email,
+    phoneNumber,
+    username,
+    password,
+    contactPersonName,
+  } = req.body;
 
   try {
-    const user = new User({ email, password });
+    const user = new User({
+      clienttype,
+      organizationName,
+      email,
+      phoneNumber,
+      username,
+      password,
+      contactPersonName,
+    });
+
     await user.save();
 
     const token = jwt.sign({ userId: user._id }, jwtKey);
     res.send({ token: token });
 
-    console.log("Completd Signup ", email, password);
+    // console.log(
+    //   "Completd Signup ",
+    //   clienttype,
+    //   organizationName,
+    //   email,
+    //   phoneNumber,
+    //   username,
+    //   password,
+    //   contactPersonName
+    // );
   } catch (err) {
     console.log(err.message);
     return res.status(422).json({ error: err.message });
@@ -30,7 +56,7 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  const { email, password } = req.body;
+  const { clientType, email, password } = req.body;
 
   if (!email || !password) {
     return res.status(422).json({ error: "Must provide email or password" });
@@ -43,13 +69,15 @@ router.post("/signin", async (req, res) => {
 
   try {
     await user.comparePassword(password);
-    console.log("here", email, password);
+    console.log("here : ", clientType, email, password);
 
     const token = jwt.sign({ userId: user._id }, jwtKey);
     res.send({ token: token });
     console.log("Completd Signin ", email, password);
   } catch (err) {
-    return res.status(422).json({ error: "Must provide email or password" });
+    return res
+      .status(422)
+      .json({ error: "Must provide Client type or email or password" });
   }
 });
 

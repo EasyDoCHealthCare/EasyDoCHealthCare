@@ -11,6 +11,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { useNavigation } from "@react-navigation/native";
+import { set } from "date-fns";
 import React, { useState } from "react";
 import HomeScreen from "../../sideScreens/HomeScreen";
 
@@ -18,22 +19,53 @@ const ClientSignUp = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedValue, setSelectedValue] = useState(""); // ["Clinic", "Doctor's Chamber", "Testing Center"]
   const [organizationName, setOrganizationName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [contactPersonName, setContactPersonName] = useState("");
 
   const sendCred = async () => {
-    console.log("username: ", username);
-    console.log("email: ", email);
-    console.log("password: ", password);
-    console.log("confirm password:", confirmPassword);
-    console.log("phone number:", phoneNumber);
-    console.log("organization name:", organizationName);
-    console.log("contact person name:", contactPersonName);
+    // check if password and confirm password are same
+    if (password !== confirmPassword) {
+      alert("password and confirm password are not same");
+      return;
+    }
+
+    // check if any field is empty
+    if (
+      selectedValue === "" ||
+      organizationName === "" ||
+      email === "" ||
+      phoneNumber === "" ||
+      username === "" ||
+      password === "" ||
+      confirmPassword === "" ||
+      contactPersonName === ""
+    ) {
+      alert("please fill all the fields");
+      return;
+    }
+
+    // check if email is valid
+    const emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!emailRegex.test(email)) {
+      alert("please enter a valid email");
+      return;
+    }
+
+    // console.log("selected value: ", selectedValue);
+    // console.log("organization name:", organizationName);
+    // console.log("email: ", email);
+    // console.log("phone number:", phoneNumber);
+    // console.log("username: ", username);
+    // console.log("password: ", password);
+    // console.log("confirm password:", confirmPassword);
+    // console.log("contact person name:", contactPersonName);
 
     fetch("http://10.117.10.75:3000/signup", {
       method: "POST",
@@ -41,8 +73,13 @@ const ClientSignUp = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        clienttype: selectedValue,
+        organizationName: organizationName,
         email: email,
+        phoneNumber: phoneNumber,
+        username: username,
         password: password,
+        contactPersonName: contactPersonName,
       }),
     })
       .then((res) => res.json())
@@ -78,7 +115,8 @@ const ClientSignUp = () => {
           // defaultValueByIndex={1}
           // defaultValue={'Egypt'}
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
+            // console.log(selectedItem, index);
+            setSelectedValue(selectedItem);
           }}
           defaultButtonText={"Select Client"}
           buttonTextAfterSelection={(selectedItem, index) => {
@@ -106,37 +144,19 @@ const ClientSignUp = () => {
 
         <TextInput
           style={styles.textInput}
-          placeholder="Username*"
-          value={username}
+          placeholder="Name of Organization"
+          value={organizationName}
           onChangeText={(text) => {
-            setUsername(text);
+            setOrganizationName(text);
           }}
         ></TextInput>
 
         <TextInput
           style={styles.textInput}
-          placeholder="Email Id*"
+          placeholder="Email Id"
           value={email}
           onChangeText={(text) => {
             setEmail(text);
-          }}
-        ></TextInput>
-
-        <TextInput
-          style={styles.textInput}
-          placeholder="Password*"
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
-        ></TextInput>
-
-        <TextInput
-          style={styles.textInput}
-          placeholder="Confirm Password*"
-          value={confirmPassword}
-          onChangeText={(text) => {
-            setConfirmPassword(text);
           }}
         ></TextInput>
 
@@ -152,10 +172,28 @@ const ClientSignUp = () => {
 
         <TextInput
           style={styles.textInput}
-          placeholder="Name of Organization"
-          value={organizationName}
+          placeholder="Username"
+          value={username}
           onChangeText={(text) => {
-            setOrganizationName(text);
+            setUsername(text);
+          }}
+        ></TextInput>
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+          }}
+        ></TextInput>
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
           }}
         ></TextInput>
 
