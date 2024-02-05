@@ -9,7 +9,12 @@ const Home = () => {
     <View style={{ flex: 1 }}>
       <HomeScreen />
       <View style={styles.container}>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => {
+            navigation.navigate("PatLogIn");
+          }}
+        >
           <Text>Patient Login</Text>
         </TouchableOpacity>
         <TouchableOpacity
