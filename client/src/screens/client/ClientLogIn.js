@@ -19,7 +19,7 @@ const ClientLogIn = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
 
-  const [selectedValue, setSelectedValue] = useState(""); // ["Clinic", "Doctor's Chamber", "Testing Center"
+  const [selectedValue, setSelectedValue] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
