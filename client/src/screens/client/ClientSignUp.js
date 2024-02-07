@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -19,7 +20,7 @@ const ClientSignUp = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
 
-  const [selectedValue, setSelectedValue] = useState(""); // ["Clinic", "Doctor's Chamber", "Testing Center"]
+  const [selectedValue, setSelectedValue] = useState("");
   const [organizationName, setOrganizationName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -58,33 +59,34 @@ const ClientSignUp = () => {
       return;
     }
 
-    fetch("http://10.117.10.75:3000/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        clienttype: selectedValue,
-        organizationName: organizationName,
-        email: email,
-        phoneNumber: phoneNumber,
-        username: username,
-        password: password,
-        contactPersonName: contactPersonName,
-      }),
-    })
-      .then((res) => res.json())
-      .then(async (data) => {
-        console.log("data: ", data);
-
-        try {
-          await AsyncStorage.setItem("token", data.token);
-          navigation.navigate("AuthRegister");
-        } catch (e) {
-          console.log("error hai : \n", e);
-          alert("correctly fill the form : " + data.error);
+    try {
+      const response = await axios.post(
+        "http://10.117.10.75:3000/signup",
+        {
+          clienttype: selectedValue,
+          organizationName: organizationName,
+          email: email,
+          phoneNumber: phoneNumber,
+          username: username,
+          password: password,
+          contactPersonName: contactPersonName,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
+
+      const data = response.data;
+      console.log("data: ", data);
+
+      await AsyncStorage.setItem("token", data.token);
+      navigation.navigate("AuthRegister");
+    } catch (e) {
+      console.log("error hai : \n", e);
+      alert("correctly fill the form : " + data.error);
+    }
   };
 
   return (

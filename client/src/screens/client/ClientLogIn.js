@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -23,35 +24,35 @@ const ClientLogIn = () => {
   const [password, setPassword] = useState("");
 
   const loginCred = async () => {
-    // check if any field is empty
     if (selectedValue === "" || email === "" || password === "") {
       alert("please fill all the fields");
       return;
     }
 
-    fetch("http://10.117.10.75:3000/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        clientType: selectedValue,
-        email: email,
-        password: password,
-      }),
-    })
-      .then((res) => res.json())
-      .then(async (data) => {
-        console.log("data: ", data);
-
-        try {
-          await AsyncStorage.setItem("token", data.token);
-          navigation.navigate("ClientDashboard");
-        } catch (e) {
-          console.log("error hai : \n", e);
-          alert("correctly fill the form : " + data.error);
+    try {
+      const response = await axios.post(
+        "http://10.117.10.75:3000/signin",
+        {
+          clientType: selectedValue,
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
+
+      const data = response.data;
+      console.log("data: ", data);
+
+      await AsyncStorage.setItem("token", data.token);
+      navigation.navigate("ClientDashboard");
+    } catch (error) {
+      console.log("error hai: \n", error);
+      alert("correctly fill the form: " + error.response.data.error);
+    }
   };
 
   return (
