@@ -15,6 +15,12 @@ import RemoveDoc from "./client/RemoveDoc";
 import ChangeTimings from "./client/ChangeTimings";
 import PatList from "./client/PatList";
 import GetList from "./client/GetList";
+import PatLogIn from "./patient/PatLogIn";
+import PatSignUp from "./patient/PatSignUp";
+import PatAuthRegister from "./patient/PatAuthRegister";
+import PatLoginSuccess from "./patient/PatLoginSuccess";
+import PatDashboard from "./patient/PatDashboard";
+import NearbyDoc from "./patient/NearbyDoc";
 
 const Drawer = createDrawerNavigator();
 
@@ -74,6 +80,36 @@ const MainScreen = () => {
       <Drawer.Screen
         name="GetList"
         component={GetList}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="PatLogIn"
+        component={PatLogIn}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="PatSignUp"
+        component={PatSignUp}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="PatAuthRegister"
+        component={PatAuthRegister}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="PatLoginSuccess"
+        component={PatLoginSuccess}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="PatDashboard"
+        component={PatDashboard}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="NearbyDoc"
+        component={NearbyDoc}
         options={{ headerShown: false }}
       />
     </Drawer.Navigator>
