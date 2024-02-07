@@ -1,16 +1,14 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const { jwtKey } = require("../keys");
+import express from "express";
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
-const router = express.Router();
-const User = mongoose.model("User");
+const autoRoute = express.Router();
 
-router.get("/signup", (req, res) => {
+autoRoute.get("/signup", (req, res) => {
   res.send("sign up pages");
 });
 
-router.post("/signup", async (req, res) => {
+autoRoute.post("/signup", async (req, res) => {
   console.log(req.body);
 
   const {
@@ -36,26 +34,15 @@ router.post("/signup", async (req, res) => {
 
     await user.save();
 
-    const token = jwt.sign({ userId: user._id }, jwtKey);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY);
     res.send({ token: token });
-
-    // console.log(
-    //   "Completd Signup ",
-    //   clienttype,
-    //   organizationName,
-    //   email,
-    //   phoneNumber,
-    //   username,
-    //   password,
-    //   contactPersonName
-    // );
   } catch (err) {
     console.log(err.message);
     return res.status(422).json({ error: err.message });
   }
 });
 
-router.post("/signin", async (req, res) => {
+autoRoute.post("/signin", async (req, res) => {
   const { clientType, email, password } = req.body;
 
   if (!email || !password) {
@@ -71,7 +58,7 @@ router.post("/signin", async (req, res) => {
     await user.comparePassword(password);
     console.log("here : ", clientType, email, password);
 
-    const token = jwt.sign({ userId: user._id }, jwtKey);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY);
     res.send({ token: token });
     console.log("Completd Signin ", email, password);
   } catch (err) {
@@ -81,4 +68,4 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default autoRoute;

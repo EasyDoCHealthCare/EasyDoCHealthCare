@@ -58,15 +58,6 @@ const ClientSignUp = () => {
       return;
     }
 
-    // console.log("selected value: ", selectedValue);
-    // console.log("organization name:", organizationName);
-    // console.log("email: ", email);
-    // console.log("phone number:", phoneNumber);
-    // console.log("username: ", username);
-    // console.log("password: ", password);
-    // console.log("confirm password:", confirmPassword);
-    // console.log("contact person name:", contactPersonName);
-
     fetch("http://10.117.10.75:3000/signup", {
       method: "POST",
       headers: {

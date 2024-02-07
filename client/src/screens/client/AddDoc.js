@@ -1,25 +1,31 @@
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
-  View,
+  Keyboard,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Keyboard,
-  SafeAreaView,
+  View,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { IconButton, MD3Colors } from "react-native-paper";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment";
 
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
+import moment from "moment";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { IconButton, MD3Colors } from "react-native-paper";
+
 import SelectDropdown from "react-native-select-dropdown";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import HomeScreen from "../../sideScreens/HomeScreen";
 
 const AddDoc = () => {
+  const [NewDoc, setNewDoc] = useState("");
+  const [Qualifications, setQualifications] = useState("");
+  const [Specialization, setSpecialization] = useState("");
+  const [Fees, setFees] = useState("");
+
   const countries = ["None", "Cardio", "Physician", "Ortho", "Gyno"];
   const navigation = useNavigation();
 
@@ -30,6 +36,62 @@ const AddDoc = () => {
   const [timeInputs, setTimeInputs] = useState([
     { id: 1, from: new Date(), to: new Date() },
   ]);
+
+  const SaveDate = async () => {
+    // check if any field is empty
+    if (
+      NewDoc === "" ||
+      Qualifications === "" ||
+      Specialization === "" ||
+      Fees === ""
+    ) {
+      alert("please fill all the fields");
+      return;
+    }
+
+    console.log(
+      "NewDoc: ",
+      NewDoc,
+      "Qualifications: ",
+      Qualifications,
+      "Specialization: ",
+      Specialization,
+      "Fees: ",
+      Fees,
+      "selectedDays: ",
+      selectedDays,
+      "timeInputs: ",
+      timeInputs
+    );
+
+    // fetch("http://10.117.10.75:3000/signin", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     clientType: selectedValue,
+    //     email: email,
+    //     password: password,
+    //   }),
+    // })
+    //   .then((res) => res.json())
+    //   .then(async (data) => {
+    //     console.log("data: ", data);
+
+    //     try {
+    //       await AsyncStorage.setItem("token", data.token);
+    //       navigation.navigate("ClientDashboard");
+    //     } catch (e) {
+    //       console.log("error hai : \n", e);
+    //       alert("correctly fill the form : " + data.error);
+    //     }
+    //   });
+
+    navigation.navigate("ClientDashboard");
+
+    return;
+  };
 
   const scrollViewRef = useRef();
 
@@ -122,17 +184,31 @@ const AddDoc = () => {
         <TextInput
           style={styles.textInput}
           placeholder="Doctor's name"
+          value={NewDoc}
+          onChangeText={(text) => {
+            setNewDoc(text);
+          }}
         ></TextInput>
+
         <TextInput
           style={styles.textInput}
           placeholder="Qualifications"
+          value={Qualifications}
+          onChangeText={(text) => {
+            setQualifications(text);
+          }}
         ></TextInput>
+
         <Text
           style={{
             fontSize: 18,
             alignSelf: "flex-start",
             marginLeft: 70,
             marginBottom: 2,
+          }}
+          value={Specialization}
+          onChangeText={(text) => {
+            setSpecialization(text);
           }}
         >
           Specialization
@@ -167,7 +243,15 @@ const AddDoc = () => {
           rowStyle={styles.dropdown1RowStyle}
           rowTextStyle={styles.dropdown1RowTxtStyle}
         />
-        <TextInput style={styles.textInput} placeholder="Fees"></TextInput>
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Fees"
+          value={Fees}
+          onChangeText={(text) => {
+            setFees(text);
+          }}
+        ></TextInput>
 
         <Text style={{ fontSize: 20 }}>Select Availability</Text>
         <Text style={{ alignSelf: "flex-start", fontSize: 20 }}>Weekdays</Text>
@@ -235,7 +319,12 @@ const AddDoc = () => {
           <Text style={styles.buttonText}>+ Add Interval</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.btnSave}>
+        <TouchableOpacity
+          style={styles.btnSave}
+          onPress={() => {
+            SaveDate();
+          }}
+        >
           <Text>Save</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btnExit}>

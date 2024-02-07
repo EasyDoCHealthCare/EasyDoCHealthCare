@@ -1,7 +1,38 @@
-# ignore not needed files in backend
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
 # dependencies
-node_modules
+node_modules/
 
-# Keys
-Keys.js
+# Expo
+client/.expo/
+client/dist/
+client/web-build/
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+client/.metro-health-check*
+
+# debug
+client/npm-debug.*
+client/yarn-debug.*
+client/yarn-error.*
+
+# macOS
+client/.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+# env file
+.env
