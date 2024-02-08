@@ -29,7 +29,7 @@ client/.DS_Store
 *.pem
 
 # local env files
-.env*.local
+client/.env*.local
 
 # typescript
 *.tsbuildinfo

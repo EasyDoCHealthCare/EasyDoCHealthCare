@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import Client from "../models/Client.js";
 
 const requireToken = (req, res, next) => {
   const { authorization } = req.headers;
@@ -15,7 +15,7 @@ const requireToken = (req, res, next) => {
     }
 
     const { userId } = payload;
-    const user = await User.findById(userId);
+    const user = await Client.findById(userId);
     req.user = user;
     next();
   });

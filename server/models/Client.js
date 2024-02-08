@@ -67,6 +67,6 @@ userSchema.methods.comparePassword = function (candidatePassword) {
   });
 };
 
-const User = mongoose.model("User", userSchema);
+const Client = mongoose.model("Client", userSchema);
 
-export default User;
+export default Client;

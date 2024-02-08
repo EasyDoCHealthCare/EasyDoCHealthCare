@@ -15,7 +15,7 @@ app.listen(process.env.PORT, () => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Backend is running!");
 });
 
 app.post("/", (req, res) => {
@@ -23,10 +23,10 @@ app.post("/", (req, res) => {
   res.send("Got a POST request");
 });
 
-import requireToken from "./middleware/requireToken.js";
-import authRoute from "./routes/authRoutes.js";
+import ClientAuthRoute from "./routes/ClientAuthRoutes.js";
+app.use(ClientAuthRoute);
 
-app.use(authRoute);
+import requireToken from "./middleware/requireToken.js";
 app.get("/protected", requireToken, (req, res) => {
   res.send(`Your email is ${req.user.email}`);
 });

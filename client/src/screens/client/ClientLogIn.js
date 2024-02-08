@@ -6,6 +6,7 @@ import {
   View,
 } from "react-native";
 
+import { SIGNIN } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import SelectDropdown from "react-native-select-dropdown";
@@ -29,9 +30,11 @@ const ClientLogIn = () => {
       return;
     }
 
+    console.log(SIGNIN);
+
     try {
       const response = await axios.post(
-        "http://10.117.10.75:3000/signin",
+        SIGNIN,
         {
           clientType: selectedValue,
           email: email,

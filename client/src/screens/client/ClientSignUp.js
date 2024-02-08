@@ -6,6 +6,7 @@ import {
   View,
 } from "react-native";
 
+import { SIGNUP } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import SelectDropdown from "react-native-select-dropdown";
@@ -61,7 +62,7 @@ const ClientSignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://10.117.10.75:3000/signup",
+        SIGNUP,
         {
           clienttype: selectedValue,
           organizationName: organizationName,

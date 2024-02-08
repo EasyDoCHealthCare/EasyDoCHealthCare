@@ -1,14 +1,14 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import Client from "../models/Client.js";
 
-const autoRoute = express.Router();
+const Route = express.Router();
 
-autoRoute.get("/signup", (req, res) => {
+Route.get("/signup", (req, res) => {
   res.send("sign up pages");
 });
 
-autoRoute.post("/signup", async (req, res) => {
+Route.post("/signup", async (req, res) => {
   console.log(req.body);
 
   const {
@@ -22,7 +22,7 @@ autoRoute.post("/signup", async (req, res) => {
   } = req.body;
 
   try {
-    const user = new User({
+    const user = new Client({
       clienttype,
       organizationName,
       email,
@@ -42,14 +42,14 @@ autoRoute.post("/signup", async (req, res) => {
   }
 });
 
-autoRoute.post("/signin", async (req, res) => {
+Route.post("/signin", async (req, res) => {
   const { clientType, email, password } = req.body;
 
   if (!email || !password) {
     return res.status(422).json({ error: "Must provide email or password" });
   }
 
-  const user = await User.findOne({ email: email });
+  const user = await Client.findOne({ email: email });
   if (!user) {
     return res.status(422).json({ error: "Must provide email or password" });
   }
@@ -68,4 +68,4 @@ autoRoute.post("/signin", async (req, res) => {
   }
 });
 
-export default autoRoute;
+export default Route;

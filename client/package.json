@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
-  "proxy" : "http://10.117.10.75:3000",
+  "proxy": "http://10.117.10.75:3000",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -25,6 +25,7 @@
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-calendar-strip": "^1.4.2",
+    "react-native-dotenv": "^3.4.9",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-otp-textinput": "^1.1.3",
