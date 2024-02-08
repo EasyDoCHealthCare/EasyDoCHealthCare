@@ -1,32 +1,84 @@
 import {
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { SIGNIN } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import SelectDropdown from "react-native-select-dropdown";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import HomeScreen from "../../sideScreens/HomeScreen";
-import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
+import HomeScreen from "../../sideScreens/HomeScreen";
 
 const ClientLogIn = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
+
+  const [selectedValue, setSelectedValue] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const loginCred = async () => {
+    if (selectedValue === "" || email === "" || password === "") {
+      alert("please fill all the fields");
+      return;
+    }
+
+    console.log(SIGNIN);
+
+    try {
+      const response = await axios.post(
+        SIGNIN,
+        {
+          clientType: selectedValue,
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = response.data;
+      console.log("data: ", data);
+
+      await AsyncStorage.setItem("token", data.token);
+      navigation.navigate("ClientDashboard");
+    } catch (error) {
+      console.log("error hai: \n", error);
+      alert("correctly fill the form: " + error.response.data.error);
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <HomeScreen />
       <View style={styles.container}>
-        <Text style={{ fontSize: 18, alignSelf:"flex-start", marginLeft:70, marginBottom:2}}>Select Client type</Text>
+        <Text
+          style={{
+            fontSize: 18,
+            alignSelf: "flex-start",
+            marginLeft: 70,
+            marginBottom: 2,
+          }}
+        >
+          Select Client type
+        </Text>
         <SelectDropdown
           data={countries}
           // defaultValueByIndex={1}
           // defaultValue={'Egypt'}
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
+            // console.log(selectedItem, index);
+            setSelectedValue(selectedItem);
           }}
           defaultButtonText={"Select Client"}
           buttonTextAfterSelection={(selectedItem, index) => {
@@ -51,10 +103,31 @@ const ClientLogIn = () => {
           rowStyle={styles.dropdown1RowStyle}
           rowTextStyle={styles.dropdown1RowTxtStyle}
         />
-        <TextInput style={styles.textInput} placeholder="username"></TextInput>
-        <TextInput style={styles.textInput} placeholder="password"></TextInput>
 
-        <TouchableOpacity style={styles.loginBtn} onPress={()=>{navigation.navigate("ClientDashboard")}}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Email Id"
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+          }}
+        ></TextInput>
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+          }}
+        ></TextInput>
+
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={() => {
+            loginCred();
+          }}
+        >
           <Text
             style={{ textDecorationLine: "underline", fontStyle: "italic" }}
           >

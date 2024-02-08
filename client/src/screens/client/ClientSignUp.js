@@ -1,21 +1,95 @@
 import {
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { SIGNUP } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import SelectDropdown from "react-native-select-dropdown";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import HomeScreen from "../../sideScreens/HomeScreen";
-import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { set } from "date-fns";
+import React, { useState } from "react";
+import HomeScreen from "../../sideScreens/HomeScreen";
 
 const ClientSignUp = () => {
   const countries = ["Clinic", "Doctor's Chamber", "Testing Center"];
   const navigation = useNavigation();
+
+  const [selectedValue, setSelectedValue] = useState("");
+  const [organizationName, setOrganizationName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [contactPersonName, setContactPersonName] = useState("");
+
+  const sendCred = async () => {
+    // check if password and confirm password are same
+    if (password !== confirmPassword) {
+      alert("password and confirm password are not same");
+      return;
+    }
+
+    // check if any field is empty
+    if (
+      selectedValue === "" ||
+      organizationName === "" ||
+      email === "" ||
+      phoneNumber === "" ||
+      username === "" ||
+      password === "" ||
+      confirmPassword === "" ||
+      contactPersonName === ""
+    ) {
+      alert("please fill all the fields");
+      return;
+    }
+
+    // check if email is valid
+    const emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!emailRegex.test(email)) {
+      alert("please enter a valid email");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        SIGNUP,
+        {
+          clienttype: selectedValue,
+          organizationName: organizationName,
+          email: email,
+          phoneNumber: phoneNumber,
+          username: username,
+          password: password,
+          contactPersonName: contactPersonName,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = response.data;
+      console.log("data: ", data);
+
+      await AsyncStorage.setItem("token", data.token);
+      navigation.navigate("AuthRegister");
+    } catch (e) {
+      console.log("error hai : \n", e);
+      alert("correctly fill the form : " + data.error);
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <HomeScreen />
@@ -35,7 +109,8 @@ const ClientSignUp = () => {
           // defaultValueByIndex={1}
           // defaultValue={'Egypt'}
           onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index);
+            // console.log(selectedItem, index);
+            setSelectedValue(selectedItem);
           }}
           defaultButtonText={"Select Client"}
           buttonTextAfterSelection={(selectedItem, index) => {
@@ -60,31 +135,75 @@ const ClientSignUp = () => {
           rowStyle={styles.dropdown1RowStyle}
           rowTextStyle={styles.dropdown1RowTxtStyle}
         />
+
         <TextInput
           style={styles.textInput}
           placeholder="Name of Organization"
+          value={organizationName}
+          onChangeText={(text) => {
+            setOrganizationName(text);
+          }}
         ></TextInput>
-        <TextInput style={styles.textInput} placeholder="Email Id"></TextInput>
+
         <TextInput
           style={styles.textInput}
-          placeholder="Number"
-          keyboardType="numeric"
+          placeholder="Email Id"
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+          }}
         ></TextInput>
-        <TextInput style={styles.textInput} placeholder="Username"></TextInput>
-        <TextInput style={styles.textInput} placeholder="Password"></TextInput>
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Phone Number"
+          keyboardType="numeric"
+          value={phoneNumber}
+          onChangeText={(text) => {
+            setPhoneNumber(text);
+          }}
+        ></TextInput>
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Username"
+          value={username}
+          onChangeText={(text) => {
+            setUsername(text);
+          }}
+        ></TextInput>
+
+        <TextInput
+          style={styles.textInput}
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+          }}
+        ></TextInput>
+
         <TextInput
           style={styles.textInput}
           placeholder="Confirm Password"
+          value={confirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+          }}
         ></TextInput>
+
         <TextInput
           style={styles.textInput}
           placeholder="Name of contact person"
+          value={contactPersonName}
+          onChangeText={(text) => {
+            setContactPersonName(text);
+          }}
         ></TextInput>
 
         <TouchableOpacity
           style={styles.loginBtn}
           onPress={() => {
-            navigation.navigate("AuthRegister");
+            sendCred();
           }}
         >
           <Text
