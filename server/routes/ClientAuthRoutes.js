@@ -8,7 +8,7 @@ Route.get("/signup", (req, res) => {
   res.send("sign up pages");
 });
 
-Route.post("/signup", async (req, res) => {
+Route.post("/client/signup", async (req, res) => {
   console.log(req.body);
 
   const {
@@ -42,7 +42,7 @@ Route.post("/signup", async (req, res) => {
   }
 });
 
-Route.post("/signin", async (req, res) => {
+Route.post("/client/login", async (req, res) => {
   const { clientType, email, password } = req.body;
 
   if (!email || !password) {
@@ -55,12 +55,11 @@ Route.post("/signin", async (req, res) => {
   }
 
   try {
-    await user.comparePassword(password);
-    console.log("here : ", clientType, email, password);
+    console.log("user: ", user);
 
+    await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY);
-    res.send({ token: token });
-    console.log("Completd Signin ", email, password);
+    res.send({ token: token, user: user.username });
   } catch (err) {
     return res
       .status(422)

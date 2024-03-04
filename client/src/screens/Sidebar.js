@@ -1,13 +1,43 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 import {
+  AntDesign,
   FontAwesome,
   Octicons,
-  AntDesign,
   SimpleLineIcons,
 } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
 const Sidebar = ({ navigation }) => {
+  const [user, setUser] = useState("User");
+
+  useFocusEffect(() => {
+    const getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem("user");
+        if (value !== null) {
+          setUser(value);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      console.log("user: ", user);
+    };
+    getData();
+  });
+
+  const logout = async () => {
+    console.log("logout");
+    try {
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("user");
+      navigation.navigate("Home");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
       <View style={{ height: 5, width: "100", backgroundColor: "blue" }}></View>
@@ -26,7 +56,7 @@ const Sidebar = ({ navigation }) => {
           marginTop: 20,
         }}
       >
-        User
+        {user}
       </Text>
       <View
         style={{
@@ -105,6 +135,9 @@ const Sidebar = ({ navigation }) => {
             marginLeft: 19,
             color: "red",
             //   alignSelf: "center",
+          }}
+          onPress={() => {
+            logout();
           }}
         >
           Logout
