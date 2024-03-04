@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 
-import { SIGNIN } from "@env";
+import { SERVER } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import SelectDropdown from "react-native-select-dropdown";
@@ -30,11 +30,9 @@ const ClientLogIn = () => {
       return;
     }
 
-    console.log(SIGNIN);
-
     try {
       const response = await axios.post(
-        SIGNIN,
+        SERVER + "/client/login",
         {
           clientType: selectedValue,
           email: email,
@@ -51,6 +49,7 @@ const ClientLogIn = () => {
       console.log("data: ", data);
 
       await AsyncStorage.setItem("token", data.token);
+      await AsyncStorage.setItem("user", data.user);
       navigation.navigate("ClientDashboard");
     } catch (error) {
       console.log("error hai: \n", error);
