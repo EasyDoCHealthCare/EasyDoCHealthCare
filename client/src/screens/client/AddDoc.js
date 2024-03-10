@@ -49,6 +49,15 @@ const AddDoc = () => {
       return;
     }
 
+    const interval = {};
+    selectedDays.forEach((day) => {
+      interval[day] = timeInputs.map((input) => ({
+        id: input.id,
+        from: moment(input.from).format("h:mm A"),
+        to: moment(input.to).format("h:mm A"),
+      }));
+    });
+
     console.log(
       "NewDoc: ",
       NewDoc,
@@ -60,8 +69,8 @@ const AddDoc = () => {
       Fees,
       "selectedDays: ",
       selectedDays,
-      "timeInputs: ",
-      timeInputs
+      "interval: ",
+      interval
     );
 
     // fetch("http://10.117.10.75:3000/signin", {
@@ -206,10 +215,10 @@ const AddDoc = () => {
             marginLeft: 70,
             marginBottom: 2,
           }}
-          value={Specialization}
-          onChangeText={(text) => {
-            setSpecialization(text);
-          }}
+          // value={Specialization}
+          // onChangeText={(text) => {
+          //   setSpecialization(text);
+          // }}
         >
           Specialization
         </Text>
@@ -219,6 +228,7 @@ const AddDoc = () => {
           // defaultValue={'Egypt'}
           onSelect={(selectedItem, index) => {
             console.log(selectedItem, index);
+            setSpecialization(selectedItem);
           }}
           defaultButtonText={"Select Specialization"}
           buttonTextAfterSelection={(selectedItem, index) => {

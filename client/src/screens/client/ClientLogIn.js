@@ -47,6 +47,7 @@ const ClientLogIn = () => {
 
       const data = response.data;
       console.log("data: ", data);
+      console.log("server:", SERVER);
 
       await AsyncStorage.setItem("token", data.token);
       await AsyncStorage.setItem("user", data.user);

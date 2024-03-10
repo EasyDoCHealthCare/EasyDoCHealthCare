@@ -61,6 +61,9 @@ const ClientSignUp = () => {
     }
 
     try {
+      console.log("email:",  email);
+      console.log("data:",  selectedValue);
+      console.log("password:",  password);
       const response = await axios.post(
         SERVER + "/client/signup",
         {
